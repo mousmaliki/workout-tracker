@@ -1,3 +1,4 @@
+(() => {
 // Core logic is shared with the test suite and works on file:// URLs.
 const {STORAGE_KEY,muscleGroups,createInitialData,validateData,loadData,saveData,findPreviousSession,recommendNext,estimatedOneRepMax}=globalThis.MMPCore;
 
@@ -68,3 +69,5 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
     navigator.serviceWorker.register('./sw.js').catch(error => console.warn('Offline app cache was not registered.', error));
   });
 }
+
+})();
