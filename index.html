@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1769aa" />
+  <meta name="description" content="A personal strength training log and progress tracker." />
+  <title>LiftLab</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/app-icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#workout"><span class="brand-mark">L</span><span>Lift<b>Lab</b></span></a>
+      <span class="side-label">TRAINING</span>
+      <nav class="nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="workout"><span>▣</span> Workout</button>
+        <button class="nav-item" data-page="progress"><span>⌁</span> Progress</button>
+        <button class="nav-item" data-page="exercises"><span>☷</span> Exercises</button>
+        <button class="nav-item" data-page="history"><span>◷</span> History</button>
+      </nav>
+      <div class="sidebar-note"><span class="note-icon">✳</span><strong>Build one rep at a time.</strong><p>Your training history stays on this device. Export a backup to move it elsewhere.</p></div>
+      <div class="side-footer">PERSONAL TRAINING LOG <span>LOCAL DATA</span></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="breadcrumb">Training <span>/</span> <b id="crumb-page">Workout</b></div><div class="top-actions"><button id="install-button" class="install-button hidden">Install app</button><button id="export-button" class="text-button">↓ Export data</button><label class="text-button import-label">↑ Import<input id="import-file" type="file" accept="application/json,.json" hidden /></label><span id="today-label" class="today-label"></span></div></header>
+      <section id="workout-page" class="page">
+        <div class="page-heading"><div><div class="eyebrow"><i></i> YOUR TRAINING SPACE</div><h1>Today's workout<span>.</span></h1><p class="subhead">A clear plan. A little more progress.</p></div><div class="heading-actions"><button id="new-workout" class="button button-light">＋ New workout</button><button id="edit-workout" class="button button-light">Edit plan</button><button id="start-workout" class="button button-dark">Start workout <span>↗</span></button></div></div>
+        <div class="day-switcher" id="day-switcher"></div>
+        <div id="planned-banner" class="plan-banner"></div>
+        <div id="active-session" class="hidden"></div>
+      </section>
+      <section id="progress-page" class="page hidden">
+        <div class="page-heading"><div><div class="eyebrow"><i></i> YOUR PROGRESS</div><h1>Getting stronger<span>.</span></h1><p class="subhead">See your lifts and training volume over time.</p></div></div>
+        <div class="dashboard-stats" id="dashboard-stats"></div>
+        <div class="chart-grid"><article class="panel chart-panel"><div class="panel-heading"><div><h2>Strength progression</h2><p>Estimated 1RM from your heaviest set</p></div><select id="strength-filter" aria-label="Choose exercise"></select></div><div id="strength-chart" class="chart-area"></div></article><article class="panel chart-panel"><div class="panel-heading"><div><h2>Weekly training volume</h2><p>Total weight × reps, in kilograms</p></div></div><div id="volume-chart" class="chart-area"></div></article></div>
+        <div class="panel recent-panel"><div class="panel-heading"><div><h2>Personal records</h2><p>Heaviest recorded set for each exercise</p></div></div><div id="records-list"></div></div>
+      </section>
+      <section id="exercises-page" class="page hidden">
+        <div class="page-heading"><div><div class="eyebrow"><i></i> MOVEMENT LIBRARY</div><h1>Exercises<span>.</span></h1><p class="subhead">Manage the movements you want in your plans.</p></div><button id="new-exercise" class="button button-dark">＋ Add exercise</button></div>
+        <div class="library-tools"><input id="exercise-search" type="search" placeholder="Search exercises" /><select id="group-filter"><option value="all">All muscle groups</option></select></div><div id="exercise-list" class="exercise-list"></div>
+      </section>
+      <section id="history-page" class="page hidden">
+        <div class="page-heading"><div><div class="eyebrow"><i></i> YOUR TRAINING LOG</div><h1>Session history<span>.</span></h1><p class="subhead">A record of the work you have put in.</p></div></div><div id="history-list" class="history-list"></div>
+      </section>
+    </main>
+  </div>
+  <dialog id="plan-dialog" class="dialog"><form method="dialog" id="plan-form"><div class="dialog-head"><div><div class="eyebrow"><i></i> EDIT ROUTINE</div><h2 id="plan-dialog-title">Workout plan</h2></div><button class="icon-button" value="cancel" aria-label="Close">×</button></div><label class="field-label">Workout name<input id="plan-name" required maxlength="48" /></label><label class="field-label">Training day<select id="plan-day"></select></label><div class="dialog-section-title">Exercises</div><div id="plan-exercises" class="plan-exercises"></div><button type="button" class="button button-light" id="plan-add-exercise">＋ Add exercise</button><div class="dialog-actions"><button class="button button-light" value="cancel">Cancel</button><button class="button button-dark" id="save-plan" value="default">Save plan</button></div></form></dialog>
+  <dialog id="exercise-dialog" class="dialog"><form method="dialog" id="exercise-form"><div class="dialog-head"><div><div class="eyebrow"><i></i> EXERCISE LIBRARY</div><h2 id="exercise-dialog-title">Add exercise</h2></div><button class="icon-button" value="cancel" aria-label="Close">×</button></div><input id="exercise-id" type="hidden" /><label class="field-label">Exercise name<input id="exercise-name" required maxlength="48" placeholder="e.g. Incline dumbbell press" /></label><label class="field-label">Muscle group<select id="exercise-group"></select></label><label class="field-label">Rep range<div class="range-fields"><input id="rep-min" type="number" min="1" max="50" value="8" aria-label="Minimum reps" /><span>to</span><input id="rep-max" type="number" min="1" max="50" value="12" aria-label="Maximum reps" /><span>reps</span></div></label><div class="dialog-actions"><button class="button button-light" value="cancel">Cancel</button><button class="button button-dark" id="save-exercise" value="default">Save exercise</button></div></form></dialog>
+  <dialog id="picker-dialog" class="dialog"><form method="dialog"><div class="dialog-head"><div><div class="eyebrow"><i></i> MOVEMENT LIBRARY</div><h2>Add to workout</h2></div><button class="icon-button" value="cancel" aria-label="Close">×</button></div><input id="picker-search" class="search-input" type="search" placeholder="Search exercises" /><div id="picker-list" class="picker-list"></div></form></dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="core.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
