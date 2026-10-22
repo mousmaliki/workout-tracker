@@ -1,9 +1,11 @@
 const CACHE_PREFIX = 'my-muscle-progress-';
-const CACHE_NAME = `${CACHE_PREFIX}v2`;
+const CACHE_NAME = `${CACHE_PREFIX}v4`;
 const APP_FILES = [
   './',
   './index.html',
   './styles.css',
+  './exercise-catalog.js',
+  './exercise-guides.js',
   './core.js',
   './app.js',
   './manifest.webmanifest',

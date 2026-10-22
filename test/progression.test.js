@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import '../exercise-catalog.js';
 import '../core.js';
 const {recommendNext,estimatedOneRepMax}=globalThis.MMPCore;
 
